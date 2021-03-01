@@ -1,13 +1,13 @@
 const prompt = require('prompt-sync')({sigint: true});
 
 // Random number from 1 - 10
-const numberToGuess = Math.floor(Math.random() * 10) + 1;
+const numberToGuess = Math.floor(Math.random() * 100) + 1;
 // This variable is used to determine if the app should continue prompting the user for input
 let playing = true; //Bool true/false
 
 while (playing) {
     // Get user input
-    let guess = prompt('Guess a number from 1 to 10: ');
+    let guess = prompt('Guess a number from 1 to 100: ');
     // Convert the string input to a number
     guess = Number(guess);
 
@@ -28,3 +28,4 @@ while (playing) {
 }
 
 console.log('G A M E   O V E R');
+
