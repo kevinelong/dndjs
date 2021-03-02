@@ -1,15 +1,20 @@
-let hero = {
-    health: 100,
-    strength: 40,
-    dexterity: 35
 
-}
-let monster = {
-    health: 100,
-    strength: 40,
-    dexterity: 35
 
+
+function makeCharacter(charName) {
+
+    return {
+        name: charName,
+        health: roll(1, 10, 10),
+        strength: roll(1, 10, 10),
+        dexterity: roll(1, 10, 10)
+
+    }
 }
+let hero = makeCharacter("Grizwald the Great");
+hero.strength *= 1.1;
+hero.health *= 2;
+let monster = makeCharacter("Lurker");
 let winner = null;
 const BASE_CHANCE_SUCCESS = 40;
 
@@ -20,9 +25,9 @@ while (winner == null) {
 
         let damage = roll(1, hero.strength, 1);
         monster.health -= damage
-        console.log("   HERO HIT!   damage:"+damage);
+        console.log(hero.name + "   HIT!   damage:" + damage);
     } else {
-        console.log("   HERO MISSED!   ");
+        console.log(hero.name + "    MISSED!   ");
     }
     let monsterHitPercent = monster.dexterity - hero.dexterity + BASE_CHANCE_SUCCESS;
 
@@ -31,26 +36,28 @@ while (winner == null) {
         let damage = roll(1, monster.strength, 1);
         hero.health -= damage
 
-        console.log("   MONSTER HIT!   damage:"+damage);
+        console.log(monster.name + "   HIT!   damage:" + damage);
 
     } else {
-        console.log("   MONSTER MISSED!   ");
+        console.log(monster.name + "   MISSED!   ");
     }
-    console.log(hero.health, monster.health);
-
     if (hero.health <= 0) {
-        winner = "monster";
+        winner = monster.name;
     }
 
     if (monster.health <= 0) {
-        winner = "hero";
+        winner = hero.name;
     }
+    console.log("");
 }
 
-if (winner == "hero") {
+console.log("");
+console.log(hero.name + ": " + hero.health, monster.name + ": " + monster.health);
+
+if (winner == hero.name) {
     console.log("VICTORY!");
 } else {
-    console.log("DEFEAT!");
+    console.log(monster.name + "   DEFEATED!   ");
 }
 
 function roll(min, max, times) {
