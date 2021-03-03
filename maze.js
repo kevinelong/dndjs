@@ -1,6 +1,64 @@
 const prompt = require('prompt-sync')({sigint: true});
-const WIDTH = 9;
-const HEIGHT = 7;
+let WIDTH = 9;
+let HEIGHT = 7;
+
+function roll(min, max, times) {
+    let total = 0
+
+    for (let t = 0; t < times; t++) {
+        total += Math.floor(Math.random() * Math.floor(max)) + min;
+    }
+    return total;
+
+}
+
+function attack(a, d) {
+    const BASE_CHANCE_SUCCESS = 40;
+    let hitPercent = a.dexterity - d.dexterity + BASE_CHANCE_SUCCESS;
+
+    if (roll(1, 100, 1) <= hitPercent) {
+        let damage = roll(1, a.strength, 1);
+        d.health -= damage
+        console.log(a.name + "   HIT!   damage:" + damage);
+    } else {
+        console.log(a.name + "    MISSED!   ");
+    }
+}
+
+
+function fight(hero, monster) {
+    let winner = null;
+    let loser = null;
+
+
+    while (winner == null) {
+        attack(hero, monster);
+        attack(monster, hero);
+        if (monster.health <= 0) {
+            winner = hero;
+            loser = monster;
+        } else if (hero.health <= 0) {
+            winner = monster;
+            loser = hero;
+        }
+        console.log("");
+    }
+
+    console.log("");
+    console.log(hero.name + ": " + hero.health, monster.name + ": " + monster.health);
+
+    console.log("VICTORY FOR " + winner.name + '!');
+
+    console.log(loser.name + "   DEFEATED!   ");
+
+    console.log("   ..BOUT FINISHED..   ");
+}
+
+function setBoardSize(width, height) {
+    WIDTH = width;
+    HEIGHT = height;
+
+}
 
 function createMap() {
     //  const WIDTH = 9;
@@ -43,24 +101,6 @@ function centerLocation(hasLocation) {
     hasLocation.location = [Math.floor(WIDTH / 2), Math.floor(HEIGHT / 2)];
 }
 
-hero = {
-    gold: 0,
-    location: [0, 0],
-    symbol: color(MAGENTA) + "H "
-}
-monster = {
-    gold: 0,
-    location: [0, 0],
-    symbol: color(RED) + "M "
-}
-gold = {
-    gold: 100,
-    location: [0, 0],
-    symbol: color(YELLOW) + "$ "
-}
-centerLocation(hero);
-randomLocation(monster);
-randomLocation(gold);
 
 function moveRight(hasLocation) {
     if (hasLocation.location[0] < (WIDTH - 1)) {
@@ -103,25 +143,84 @@ function update(command) {
 function render() {
     let map = createMap();
     map[gold.location[1]][gold.location[0]] = gold.symbol;
-    map[monster.location[1]][monster.location[0]] = monster.symbol;
+    for (let m = 0; m < monsters.length; m++) {
+        map[monsters[m].location[1]][monsters[m].location[0]] = monsters[m].symbol;
+    }
     map[hero.location[1]][hero.location[0]] = hero.symbol;
     draw(map);
     console.log(hero.gold);
 }
 
 function collision() {
+
     if (hero.location[0] == gold.location[0] && hero.location[1] == gold.location[1]) {
         hero.gold += gold.gold;
         randomLocation(gold);
     }
-    if (hero.location[0] == monster.location[0] && hero.location[1] == monster.location[1]) {
-        hero.symbol = color(RED) + "X ";
-        render();
-        console.log("Hero Died!");
-        playing = false;
+
+    for (let m = 0; m < monsters.length; m++) {
+
+        if (hero.location[0] == monsters[m].location[0] && hero.location[1] == monsters[m].location[1]) {
+            fight(hero, monsters[m]);
+
+            if (hero.health <= 0) {
+                hero.symbol = color(RED) + "X ";
+                render();
+                console.log("Hero Died!");
+                //playing = false;
+                init();
+            } else {
+                monsters.splice(m, 1);
+            }
+        }
     }
 }
 
+function makeCharacter(charName, symbol) {
+
+    return {
+        name: charName,
+        title: "",
+        gold: 0,
+        location: [0, 0],
+        symbol: symbol,
+        health: roll(1, 10, 10),
+        strength: roll(1, 10, 10),
+        dexterity: roll(1, 10, 10)
+    }
+}
+
+function makeHero(charName, symbol) {
+    let hero = makeCharacter(charName, symbol);
+    hero.strength *= 1.2;
+    hero.health *= 3;
+    return hero;
+}
+
+let hero = {};
+let gold = {};
+let monsters = [];
+const MAX_MONSTERS = 5;
+
+function init() {
+    monsters = [];
+    for (let m = 0; m < MAX_MONSTERS; m++) {
+        monsters.push(makeCharacter('m' + m, color(RED) + "M "));
+    }
+
+    setBoardSize(24, 12);
+    hero = makeHero('Grizwald', color(MAGENTA) + "H ")
+    gold = makeCharacter('gold', color(YELLOW) + "$ ")
+
+
+    centerLocation(hero);
+    for (let m = 0; m < monsters.length; m++) {
+        randomLocation(monsters[m]);
+    }
+    randomLocation(gold);
+}
+
+init()
 let playing = true;
 while (playing) {
 

@@ -40,8 +40,6 @@ function attack(a, d) {
 }
 
 function fight(hero, monster) {
-
-
     let winner = null;
 
 
@@ -61,11 +59,11 @@ function fight(hero, monster) {
     console.log(hero.name + ": " + hero.health, monster.name + ": " + monster.health);
 
     if (winner == hero.name) {
-        console.log("VICTORY!");
+        console.log("VICTORY FOR "+ hero.name+'!');
     } else {
         console.log(monster.name + "   DEFEATED!   ");
     }
-    console.log("   GAME OVER!!!   ");
+    console.log("   ..BOUT FINISHED..   ");
 }
 
 function main() {
