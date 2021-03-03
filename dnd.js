@@ -12,6 +12,7 @@ function makeCharacter(charName) {
     return {
         name: charName,
         title: "",
+        location: [12, 24],
         health: roll(1, 10, 10),
         strength: roll(1, 10, 10),
         dexterity: roll(1, 10, 10)
