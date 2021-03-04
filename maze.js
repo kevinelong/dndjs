@@ -142,7 +142,10 @@ function update(command) {
 
 function render() {
     let map = createMap();
-    map[gold.location[1]][gold.location[0]] = gold.symbol;
+    for (let i in gold) {
+        map[gold[i].location[1]][gold[i].location[0]] = gold[i].symbol;
+    }
+
     for (let m = 0; m < monsters.length; m++) {
         map[monsters[m].location[1]][monsters[m].location[0]] = monsters[m].symbol;
     }
@@ -152,12 +155,20 @@ function render() {
 }
 
 function collision() {
+    var deletedGold = -1;
+    for (let i in gold) {
+        let g = gold[i];
 
-    if (hero.location[0] == gold.location[0] && hero.location[1] == gold.location[1]) {
-        hero.gold += gold.gold;
-        randomLocation(gold);
+        if (hero.location[0] == g.location[0] && hero.location[1] == g.location[1]) {
+
+            hero.gold += g.gold;
+            deletedGold = i;
+        }
     }
-
+    if (deletedGold >= 0) {
+        gold.splice(deletedGold, 1);
+        //delete gold[deletedGold];
+    }
     for (let m = 0; m < monsters.length; m++) {
 
         if (hero.location[0] == monsters[m].location[0] && hero.location[1] == monsters[m].location[1]) {
@@ -167,8 +178,8 @@ function collision() {
                 hero.symbol = color(RED) + "X ";
                 render();
                 console.log("Hero Died!");
-                //playing = false;
-                init();
+                console.log("G A M E  O V E R");
+                process.exit(0);
             } else {
                 monsters.splice(m, 1);
             }
@@ -198,9 +209,9 @@ function makeHero(charName, symbol) {
 }
 
 let hero = {};
-let gold = {};
+let gold = [];
 let monsters = [];
-const MAX_MONSTERS = 5;
+const MAX_MONSTERS = 10;
 
 function init() {
     monsters = [];
@@ -210,14 +221,18 @@ function init() {
 
     setBoardSize(24, 12);
     hero = makeHero('Grizwald', color(MAGENTA) + "H ")
-    gold = makeCharacter('gold', color(YELLOW) + "$ ")
 
 
     centerLocation(hero);
     for (let m = 0; m < monsters.length; m++) {
         randomLocation(monsters[m]);
     }
-    randomLocation(gold);
+    for (let m = 0; m < 5; m++) {
+        gold.push(makeCharacter('gold' + m, color(YELLOW) + "$ "));
+        randomLocation(gold[m]);
+        gold[m].gold = 100;
+    }
+
 }
 
 init()
