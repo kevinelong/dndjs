@@ -143,11 +143,18 @@ function update(command) {
 function render() {
     let map = createMap();
     for (let i in gold) {
-        map[gold[i].location[1]][gold[i].location[0]] = gold[i].symbol;
+        let g = gold[i];
+        let rowIndex = g.location[1];
+        let colIndex = g.location[0];
+        map[rowIndex][colIndex] = g.symbol;
     }
 
     for (let m = 0; m < monsters.length; m++) {
-        map[monsters[m].location[1]][monsters[m].location[0]] = monsters[m].symbol;
+        let monster = monsters[m];
+        let location = monster.location;
+        let row = location[1];
+        let column = location[0];
+        map[row][column] = monster.symbol;
     }
     map[hero.location[1]][hero.location[0]] = hero.symbol;
     draw(map);
