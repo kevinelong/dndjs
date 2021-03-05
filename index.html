@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            font-size: 1.5em;
+            font-family: sans-serif;
+            background-color: cornsilk;
+            color: saddlebrown;
+        }
+
+        button {
+            font-size: 1.5em;
+            font-family: sans-serif;
+            background-color: #411a1a;
+            color: #e3b809;
+            margin-right: 12px;
+        }
+
+        #map {
+            transform: translate(-50%, -50%);
+            background: #333333;
+            width: 720px;
+            height: 480px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+
+        }
+
+        .tile {
+            box-sizing: border-box;
+            border-style: outset;
+            border-width: 1px;
+            width: 24px;
+            height: 24px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: dimgrey;
+            z-index: 100;
+        }
+
+        #output {
+            background: aliceblue;
+            color: #333333;
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            width: 180px;
+            height: 480px;
+        }
+
+        #actions {
+            text-align: center;
+            padding: 12px;
+            position: absolute;
+            bottom: 24px;
+            width: 90%;
+            background: black;
+        }
+
+        #HERO {
+            z-index: 200;
+            position: absolute;
+            left: 0;
+            top: 0;
+            
+        }
+    </style>
+</head>
+<body>
+<div id="score">0</div>
+<div id="health">0</div>
+<div id="output">MESSAGES:</div>
+<div id="map">
+    <div id="HERO">HERO</div>
+</div>
+
+<div id="actions">
+    <button onclick="moveRight()"> MOVE ==></button>
+    <button onclick="doit()">DO IT!</button>
+</div>
+<div id="target">inside div</div>
+</body>
+<script>
+    let map = document.getElementById("map");
+    for (let x = 0; x < 720; x += 24) {
+        for (let y = 0; y < 480; y += 24) {
+            let tile = document.createElement("div");
+            tile.classList.add("tile");
+            tile.style.left = x + "px";
+            tile.style.top = y + "px";
+            map.appendChild(tile);
+        }
+    }
+
+    function moveRight() {
+        x += 10;
+        document.getElementById("HERO").style = "margin-left:" + x + "px";
+    }
+
+    function doit() {
+        var target = document.getElementById("target");
+        //document.body.innerHTML = "new stuff";
+        target.innerHTML += '<br>still inside div :)';
+    }
+
+    //doit();
+</script>
+</html>
