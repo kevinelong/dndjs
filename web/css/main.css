@@ -1,0 +1,72 @@
+body {
+    font-size: 1.5em;
+    font-family: sans-serif;
+    background-color: cornsilk;
+    color: saddlebrown;
+}
+
+button {
+    font-size: 1.5em;
+    font-family: sans-serif;
+    background-color: #411a1a;
+    color: #e3b809;
+    margin-right: 12px;
+}
+
+#map {
+    transform: translate(-50%, -50%);
+    background: #333333;
+    width: 720px;
+    height: 480px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+
+}
+
+.tile {
+    box-sizing: border-box;
+    border-style: outset;
+    border-width: 1px;
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: dimgrey;
+    z-index: 100;
+}
+
+#output {
+    background: aliceblue;
+    color: #333333;
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    width: 180px;
+    height: 480px;
+}
+
+#actions {
+    text-align: center;
+    padding: 12px;
+    position: absolute;
+    bottom: 24px;
+    width: 90%;
+    background: black;
+}
+
+#HERO {
+    z-index: 200;
+    position: absolute;
+    left: 0;
+    top: 0;
+
+}
+
+.MONSTER {
+    z-index: 150;
+    position: absolute;
+    left: 48px;
+    top: 0;
+}

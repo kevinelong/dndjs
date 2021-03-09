@@ -6,9 +6,10 @@ player_list = [
     "Mattise",
     "OPEN-SLOT",
     "OPEN-SLOT",
+    "OPEN-SLOT",
     "OPEN-SLOT"
 ];
-
+    player_list [0] = "Bob";
 let how_many = player_list.length;
 
 console.log(how_many);
