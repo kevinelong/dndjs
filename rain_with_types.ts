@@ -48,14 +48,14 @@ class Rain {
     private HEIGHT: number;
 
     constructor(
-        width: number = 40,
+        width: number = 80,
         height: number = 24,
         CHANCE_OF_RAIN: number = 0.001,
         DELAY_MILLISECONDS: number = 65,
         THRESHOLD: number = 5,
         PERCENT_OF_DROP_TO_MOVE_DOWN: number = 0.90
     ) {
-        this.WIDTH = width;
+        this.WIDTH = Math.floor(width / 2);
         this.HEIGHT = height;
         this.BEYOND_LAST_ROW = height;
         this.CHANCE_OF_RAIN = CHANCE_OF_RAIN;
@@ -69,15 +69,6 @@ class Rain {
     // noinspection JSUnusedGlobalSymbols
     public send(command: Command) {
         write(command.name);
-        // let commands = {
-        //     "cycle": () => {
-        //         this.cycle()
-        //     }
-        // }
-        // if (commands.hasOwnProperty(command.name)) {
-        //     // @ts-ignore
-        //     commands[command.name](command.data);
-        // }
     }
 
     apply_drop(row_index: number, column_index: number) {
