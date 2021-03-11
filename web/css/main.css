@@ -5,12 +5,13 @@ body {
     color: saddlebrown;
 }
 
-button {
+button, a.button {
     font-size: 1.5em;
     font-family: sans-serif;
     background-color: #411a1a;
     color: #e3b809;
     margin-right: 12px;
+    padding:0.5em;
 }
 
 #map {
