@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="css/main.css" media="screen"/>
+
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src='js/main.js'></script>
+</head>
+<body>
+<div id="score">0</div>
+<div id="health">0</div>
+<div id="output">MESSAGES:</div>
+<div id="map">
+    <img src='img/HERO.png' id="HERO">
+    <img src='img/MONSTER.png' class="MONSTER">
+</div>
+
+<div id="actions">
+    <button onclick="moveRight()"> MOVE ==></button>
+    <button onclick="doit()">DO IT!</button>
+    <table style="float:right">
+        <tr>
+            <td>
+                &nbsp;
+            </td>
+            <td>
+                <button onclick="command('up')">&uarr;</button>
+            </td>
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button onclick="command('left')">&larr;</button>
+            </td>
+            <td>
+                &nbsp;
+            </td>
+            <td>
+                <button onclick="command('right')">&rarr;</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                &nbsp;
+            </td>
+            <td>
+                <button onclick="command('down')">&darr;</button>
+            </td>
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+    </table>
+
+</div>
+<div id="target">inside div</div>
+</body>
+</html>
