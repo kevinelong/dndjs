@@ -1,3 +1,4 @@
+
 const prompt = require('prompt-sync')({sigint: true});
 
 class Dice {
@@ -76,7 +77,10 @@ class Map {
 }
 
 class Mover {
-    constructor(name, kind = 'hero', attributes = undefined, location = new Location()) {
+    constructor(name,
+                kind = 'hero',
+                attributes = undefined,
+                location = new Location()) {
 
         this.name = name;
         this.location = location;
@@ -117,7 +121,7 @@ class Mover {
 
 class Game {
     constructor() {
-        this.map = new Map(new Size(20, 40));
+        this.map = new Map(new Size(31, 21));
         this.movers = [];
         this.messages = [];
         this.messages.push("WELCOME");
@@ -212,46 +216,23 @@ class Game {
 
         output += this.messages.map(i => `"${i}"`).join(",");
         output += `], "movers": [`;
-        output += this.movers.map(m =>`{"name": "${m.name}", "x": ${m.location.x}, "y": ${m.location.y}} `).join(",");
+        output += this.movers.map(m => `{"name": "${m.name}", "x": ${m.location.x}, "y": ${m.location.y}} `).join(",");
         output += "]}\n\n";
 
         return output;
     }
 
     play(command) {
-        this.move(this.hero, command);
-        this.detectCollisions(); //Apply rules. ++
-        //console.log(this.getStatus()); //displays state ++
-        //let direction = prompt('WHICH WAY?'); //whole words all caps. ++
-        //this.play(); //RECURSION. ++
+        if (command != "status") {
+            this.move(this.hero, command);
+            this.detectCollisions(); //Apply rules. ++
+            //console.log(this.getStatus()); //displays state ++
+            //let direction = prompt('WHICH WAY?'); //whole words all caps. ++
+            //this.play(); //RECURSION. ++
+        }
+
         return this.getStatus();
     }
 }
 
-let game = new Game();
-//game.play(); //Play will be our loop. Show existing state, then prompt to display current state ++
-
-let http = require('http');
-
-//create a server object:
-http.createServer(function (req, res) {
-    let url = req.url;
-    let parts = url.split('?');
-    let command = "";
-    if (parts.length > 1) {
-        let params = parts[1].split('&');
-        let keyValue = params[0].split("=");
-        command = keyValue[1];
-    }
-
-    let output = game.play(command);
-
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Request-Method', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
-    res.setHeader('Access-Control-Allow-Headers', '*');
-    res.setHeader('Content-Type', 'application/json');
-    res.write(output); //write a response to the client
-    res.end(); //end the response
-
-}).listen(8080); //the server object listens on port 8080
+module.exports.Game = Game;
