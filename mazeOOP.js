@@ -210,14 +210,11 @@ class Game {
     getStatus() {
         let output = `{"messages": [`;
 
-        for (let m of this.messages) {
-            output += `"${m}",`;
-        }
+        output += this.messages.map(i => `"${i}"`).join(",");
         output += `], "movers": [`;
-        for (let m of this.movers) {
-            output += `{"name": "${m.name}", "x": ${m.location.x}, "y": ${m.location.y}}, `;
-        }
-        output += "]}";
+        output += this.movers.map(m =>`{"name": "${m.name}", "x": ${m.location.x}, "y": ${m.location.y}} `).join(",");
+        output += "]}\n\n";
+
         return output;
     }
 
@@ -249,6 +246,12 @@ http.createServer(function (req, res) {
 
     let output = game.play(command);
 
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Request-Method', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+    res.setHeader('Access-Control-Allow-Headers', '*');
+    res.setHeader('Content-Type', 'application/json');
     res.write(output); //write a response to the client
     res.end(); //end the response
+
 }).listen(8080); //the server object listens on port 8080

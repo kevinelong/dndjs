@@ -19,6 +19,12 @@ function updateHero() {
 }
 
 function command(message) {
+    fetch('http://localhost:8080/?command=' + message.toUpperCase())
+        .then(response => response.json())
+        .then(data => console.log(data));
+}
+
+/* function command(message) {
     switch (message) {
         case "up" :
             y -= 24;
@@ -34,5 +40,7 @@ function command(message) {
             break;
     }
     updateHero();
-}
+} */
+
+
 
