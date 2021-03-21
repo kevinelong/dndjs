@@ -16,21 +16,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     command("status");
 });
-let x = 0;
-let y = 0;
 
-function updateMonster(x, y) {
-    let monster = document.getElementById("MONSTER");
-    monster.style.left = x + "px";
-    monster.style.top = y + "px";
-
-}
-
-function updateHero() {
-    let hero = document.getElementById("HERO");
-    hero.style.left = x + "px";
-    hero.style.top = y + "px";
-
+function updateMover(m) {
+    let e = document.getElementById(m.kind);
+    e.style.left = m.x * TILE_SIZE + 'px';
+    e.style.top = m.y * TILE_SIZE + 'px';
+    if(m.health <= 0) {
+        e.style.opacity = '0.5';
+    }
 }
 
 function updateMessages(messages) {
@@ -40,13 +33,9 @@ function updateMessages(messages) {
 
 function updateMap(status) {
     console.log(status);
-    x = status.movers[0].x * TILE_SIZE;
-    y = status.movers[0].y * TILE_SIZE;
-    updateHero();
-    updateMonster(status.movers[1].x * TILE_SIZE, status.movers[1].y * TILE_SIZE);
+    status.movers.map(updateMover);
     updateMessages(status.messages);
 }
-
 
 function command(message) {
     fetch('http://localhost:8080/?command=' + message.toUpperCase())
