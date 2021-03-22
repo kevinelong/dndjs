@@ -12,7 +12,11 @@
         return response.json();
     }).then((jsonData) => {
         console.log(jsonData);
-        document.body.innerHTML = "<PRE>" + JSON.stringify(jsonData, null, '\t') + "</PRE>";
+        document.body.innerHTML =
+            "JSON RESPONSE AS HTML PREFORMATTED:<BR>" +
+            "<PRE>" +
+            JSON.stringify(jsonData, null, '\t') +
+            "</PRE>";
     });
 </script>
 </html>
