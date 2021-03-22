@@ -1,7 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Unicase:wght@600&display=swap');
+
 body {
     font-size: 1em;
     font-family: sans-serif;
-    background-color: cornsilk;
+    background-color: #333333;
     color: saddlebrown;
 }
 
@@ -17,8 +19,8 @@ button, a.button {
 #map {
     transform: translate(-50%, 0);
     background: #333333;
-    width: 720px;
-    height: 480px;
+    width: 744px;
+    height: 504px;
     position: absolute;
     left: 50%;
     top: 24px;
@@ -26,29 +28,51 @@ button, a.button {
 }
 
 .tile {
+    background: url(../sprites/tileset2.png) 0 0;
     box-sizing: border-box;
-    border-style: outset;
-    border-width: 1px;
     width: 24px;
     height: 24px;
+    overflow: hidden;
     position: absolute;
     top: 0;
     left: 0;
-    background: dimgrey;
     z-index: 100;
 }
 
-#output {
-    border: 5px solid white;
-    border-radius: 15px;
-    background: linear-gradient(to right, rgb(20, 102, 255) 15%, rgb(140, 167, 205));
-    color: #eeeeee;
+#output, #gold, #inventory {
+    font-family: 'Cormorant Unicase', serif;
+    border: 1px solid darkgoldenrod;
+    border-radius: 5px;
+    background: linear-gradient(to right, rgb(25, 12, 0) 15%, rgb(100, 50, 0));
+    color: darkgoldenrod;
     position: absolute;
+    padding: 0.25em;
+}
+
+#output {
     top: 24px;
     right: 24px;
     width: 180px;
-    height: 240px;
-    padding: 0.5em;
+    height: 480px;
+
+}
+
+#gold {
+
+    top: 24px;
+    left: 24px;
+    width: 180px;
+    height: 60px;
+
+}
+
+#inventory {
+
+    top: 120px;
+    left: 24px;
+    width: 180px;
+    height: 360px;
+
 }
 
 #actions {
@@ -56,8 +80,15 @@ button, a.button {
     padding: 12px;
     position: absolute;
     bottom: 24px;
-    width: 90%;
-    background: black;
+    width: 70%;
+    background: rgba(64, 64, 64, 0.25);
+}
+
+.arrow {
+    width: 40px;
+    height: 40px;
+    margin: 0;
+
 }
 
 #hero {
@@ -72,7 +103,7 @@ button, a.button {
 
 }
 
-#monster {
+.monster {
     background: url(../sprites/troll.png) 0 0;
     width: 32px;
     height: 32px;

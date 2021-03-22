@@ -18,11 +18,23 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function updateMover(m) {
-    let e = document.getElementById(m.kind);
-    e.style.left = m.x * TILE_SIZE + 'px';
-    e.style.top = m.y * TILE_SIZE + 'px';
-    if(m.health <= 0) {
-        e.style.opacity = '0.5';
+    let e = undefined;
+    if (m.kind == "hero") {
+        e = document.getElementById(m.kind);
+    } else if (m.kind == "monster") {
+        e = document.createElement("div");
+        e.classList.add("monster");
+        document.getElementById("map").appendChild(e);
+
+    }
+    if (e != undefined) {
+
+
+        e.style.left = m.x * TILE_SIZE + 'px';
+        e.style.top = m.y * TILE_SIZE + 'px';
+        if (m.health <= 0) {
+            e.style.opacity = '0.5';
+        }
     }
 }
 
@@ -31,8 +43,23 @@ function updateMessages(messages) {
     o.innerHTML = messages.join("<br>");
 }
 
+function updateInventory(inventory) {
+    let o = document.getElementById("inventory");
+    o.innerHTML = inventory.join("<br>");
+}
+
+function updateGold(gold) {
+    let o = document.getElementById("gold");
+    o.innerHTML = `GOLD: ${gold}`;
+}
+let frame = 0;
 function updateMap(status) {
+    frame++;
+    document.getElementById("hero").style.backgroundPositionX = ((frame % 5) * 32).toString() + 'px';
+    updateInventory(status.movers[0].inventory);
+    updateGold(status.movers[0].gold);
     console.log(status);
+    document.querySelectorAll('.monster').forEach(e => e.remove());
     status.movers.map(updateMover);
     updateMessages(status.messages);
 }

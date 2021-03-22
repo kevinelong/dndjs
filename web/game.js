@@ -170,10 +170,14 @@ class Game {
         this.map.moveCenter(this.hero);
         this.hero.inventory.push(new Weapon('Rusty Short Sword', 5));
         this.hero.inventory.push(new Armor('Leather Carapace', 5));
-
-        this.monster = new Mover('Troll', 'monster');
-        this.addMover(this.monster);
-        this.map.moveRandom(this.monster);
+        const MONSTER_COUNT = 3;
+        for (let i = 0; i < MONSTER_COUNT; i++) {
+            this.monster = new Mover('Troll', 'monster');
+            this.addMover(this.monster);
+            this.map.moveRandom(this.monster);
+            this.monster.gold = 500;
+            this.monster.inventory.push(new Weapon('Rusty Cleaver', 15));
+        }
     }
 
     addMessage(text) {
@@ -223,6 +227,10 @@ class Game {
             if (monster.getValue('health') <= 0) {
                 winner = hero;
                 loser = monster;
+                loser.inventory.map(i => winner.inventory.push(i));
+                winner.gold += loser.gold;
+                loser.gold = 0;
+                loser.inventory = [];
             } else if (hero.getValue('health') <= 0) {
                 winner = monster;
                 loser = hero;
@@ -290,6 +298,7 @@ class Game {
     }
 
     play(command) {
+        this.messages = [];
         if (command != "status") {
             this.move(this.hero, command);
             this.detectCollisions(); //Apply rules. ++
