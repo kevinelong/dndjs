@@ -57,6 +57,7 @@ class Map {
     constructor(size = new Size()) {
         this.size = size;
         this.locations = [];
+
         for (let x = 0; x < size.width; x++) {
             for (let y = 0; y < size.height; y++) {
                 this.locations.push(new Location(x, y));
@@ -65,6 +66,7 @@ class Map {
     }
 
     moveRandom(mover) {
+
         mover.location.x = Math.floor(Math.random() * this.size.width);
         mover.location.y = Math.floor(Math.random() * this.size.height);
     }
@@ -75,17 +77,55 @@ class Map {
     }
 }
 
+class Item {
+    constructor(name, kind) {
+        this.name = name;
+        this.kind = kind;
+
+    }
+}
+
+class Weapon extends Item {
+    constructor(name, damage) {
+        super(name, "weapon")
+        this.damage = damage;
+
+    }
+}
+
+class Armor extends Item {
+    constructor(name, armor) {
+        super(name, "armor");
+        this.armor = armor;
+    }
+
+}
+
 class Mover {
-    constructor(name, kind = 'hero', attributes = undefined, location = new Location()) {
+    constructor(name,
+                kind = 'hero',
+                attributes = undefined,
+                inventory = undefined,
+                gold = 0,
+                location = new Location()) {
 
         this.name = name;
         this.location = location;
         this.kind = kind;
+        this.gold = gold;
         if (attributes === undefined) {
+
             this.attributes = [];
             this.attributes.push(new Attribute("health"));
             this.attributes.push(new Attribute("strength"));
             this.attributes.push(new Attribute("dexterity"));
+        } else {
+            this.attributes = attributes;
+        }
+
+        if (inventory === undefined) {
+            this.inventory = [];
+
         } else {
             this.attributes = attributes;
         }
@@ -117,14 +157,19 @@ class Mover {
 
 class Game {
     constructor() {
-        this.map = new Map(new Size(20, 40));
+
+        this.map = new Map(new Size(31, 21));
         this.movers = [];
         this.messages = [];
+        this.updates = [];
         this.messages.push("WELCOME");
 
         this.hero = new Mover('Conan');
+        this.hero.setValue('health', 100);
         this.addMover(this.hero);
         this.map.moveCenter(this.hero);
+        this.hero.inventory.push(new Weapon('Rusty Short Sword', 5));
+        this.hero.inventory.push(new Armor('Leather Carapace', 5));
 
         this.monster = new Mover('Troll', 'monster');
         this.addMover(this.monster);
@@ -184,6 +229,11 @@ class Game {
             }
             this.addMessage("");
         }
+        this.updates.push({
+            type: 'fight_result',
+            winner: winner.name,
+            loser: loser.name
+        })
 
         this.addMessage("");
         this.addMessage(hero.name + ": " + hero.getValue('health'), monster.name + ": " + monster.getValue('health'));
@@ -200,55 +250,58 @@ class Game {
             for (let m2 of this.movers) {
                 if (m2.location.equals(m.location)) {
                     if (m.kind == 'hero' && m2.kind == 'monster') {
-                        this.fight(m, m2);
+                        if (m2.getValue('health') > 0) {
+                            this.fight(m, m2);
+                        }
                     }
                 }
             }
         }
     }
 
-    getStatus() {
-        let output = `{"messages": [`;
+    getUpdates() {
+        let updates = this.updates;
+        this.updates = [];
+        return updates;
+    }
 
-        for (let m of this.messages) {
-            output += `"${m}",`;
+    getStatus() {
+        let output = {
+            updates: this.getUpdates(),
+            messages: this.messages,
+            movers: this.movers.map(m => {
+                return {
+                    health: m.getValue("health"),
+                    name: m.name,
+                    kind: m.kind,
+                    gold: m.gold,
+                    inventory: m.inventory.map(i => {
+                        return i.name;
+                    }),
+                    x: m.location.x,
+                    y: m.location.y
+                }
+
+            })
+
         }
-        output += `], "movers": [`;
-        for (let m of this.movers) {
-            output += `{"name": "${m.name}", "x": ${m.location.x}, "y": ${m.location.y}}, `;
-        }
-        output += "]}";
-        return output;
+        return JSON.stringify(output);
+
     }
 
     play(command) {
-        this.move(this.hero, command);
-        this.detectCollisions(); //Apply rules. ++
-        //console.log(this.getStatus()); //displays state ++
-        //let direction = prompt('WHICH WAY?'); //whole words all caps. ++
-        //this.play(); //RECURSION. ++
+        if (command != "status") {
+            this.move(this.hero, command);
+            this.detectCollisions(); //Apply rules. ++
+            //console.log(this.getStatus()); //displays state ++
+            //let direction = prompt('WHICH WAY?'); //whole words all caps. ++
+            //this.play(); //RECURSION. ++
+        }
+
         return this.getStatus();
     }
 }
 
-let game = new Game();
-//game.play(); //Play will be our loop. Show existing state, then prompt to display current state ++
-
-let http = require('http');
-
-//create a server object:
-http.createServer(function (req, res) {
-    let url = req.url;
-    let parts = url.split('?');
-    let command = "";
-    if (parts.length > 1) {
-        let params = parts[1].split('&');
-        let keyValue = params[0].split("=");
-        command = keyValue[1];
-    }
-
-    let output = game.play(command);
-
-    res.write(output); //write a response to the client
-    res.end(); //end the response
-}).listen(8080); //the server object listens on port 8080
+module
+    .exports
+    .Game = Game;
