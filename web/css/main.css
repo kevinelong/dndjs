@@ -93,7 +93,7 @@ button, a.button {
 
 #hero {
     background: url(../sprites/knight.png) 0 0;
-    width: 24px;
+    width: 32px;
     height: 32px;
     margin-top: -6px;
     z-index: 200;
@@ -105,10 +105,12 @@ button, a.button {
 
 .monster {
     background: url(../sprites/troll.png) 0 0;
-    width: 32px;
-    height: 32px;
-    margin-top: -12px;
-    margin-left: -6px;
+    background-position-x: 0px;
+    background-position-y: 90px;
+    width: 30px;
+    height: 30px;
+    margin-top: 0px;
+    margin-left: 0px;
     z-index: 150;
     position: absolute;
     left: 48px;

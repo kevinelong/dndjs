@@ -1,0 +1,32 @@
+<body>Set focus to page and press "W, S, A, -or- D"</body>
+<script>
+    document.onkeydown = function (e) {
+        console.log(e);
+        let str = "";
+
+        switch (e.code) {
+            case "KeyA":
+            case 'ArrowLeft':
+                str = 'Left pressed!';
+                break;
+
+            case 'KeyW':
+            case 'ArrowUp':
+                str = 'Up pressed!';
+                break;
+
+            case 'KeyD':
+            case 'ArrowRight':
+                str = 'Right pressed!';
+                break;
+
+            case 'KeyS':
+            case 'ArrowDown':
+                str = 'Down pressed!';
+                break;
+        }
+        console.log(str);
+
+        document.body.innerHTML = str;
+    }
+</script>

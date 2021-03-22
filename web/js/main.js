@@ -14,7 +14,54 @@ document.addEventListener("DOMContentLoaded", () => {
             map.appendChild(tile);
         }
     }
+
     command("status");
+    let monsterStep = 0;
+
+    function animateMonster() {
+        document.querySelectorAll('.monster').forEach(e => e.style.backgroundPositionY = (((monsterStep % 4) - 0) * -30).toString() + "px");
+        monsterStep++;
+        setTimeout(animateMonster, 500)
+    }
+
+    animateMonster();
+    document.onkeydown = function (e) {
+        console.log(e);
+        let str = "";
+
+        switch (e.code) {
+            case "KeyA":
+            case 'ArrowLeft':
+                str = 'Left pressed!';
+                document.getElementById("hero").style.backgroundPositionY = (-64).toString() + 'px';
+                command('left')
+                break;
+
+            case 'KeyW':
+            case 'ArrowUp':
+                str = 'Up pressed!';
+                document.getElementById("hero").style.backgroundPositionY = (-32).toString() + 'px';
+                command('up')
+                break;
+
+            case 'KeyD':
+            case 'ArrowRight':
+                str = 'Right pressed!';
+                document.getElementById("hero").style.backgroundPositionY = (-96).toString() + 'px';
+                command('right')
+                break;
+
+            case 'KeyS':
+            case 'ArrowDown':
+                str = 'Down pressed!';
+                document.getElementById("hero").style.backgroundPositionY = (0).toString() + 'px';
+                command('down')
+                break;
+        }
+        console.log(str);
+
+        // document.body.innerHTML = str;
+    }
 });
 
 function updateMover(m) {
@@ -52,7 +99,9 @@ function updateGold(gold) {
     let o = document.getElementById("gold");
     o.innerHTML = `GOLD: ${gold}`;
 }
+
 let frame = 0;
+
 function updateMap(status) {
     frame++;
     document.getElementById("hero").style.backgroundPositionX = ((frame % 5) * 32).toString() + 'px';
