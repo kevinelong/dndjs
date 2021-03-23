@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+<script>
+    let counter = 0;
+    function step() {
+        document.body.innerHTML = counter.toString();
+        counter++;
+        setTimeout(step, 100);
+    }
+    step();
+</script>
+</html>

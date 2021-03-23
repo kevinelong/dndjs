@@ -8,24 +8,24 @@
     <script src='js/main.js'></script>
 </head>
 <body>
-<div id="score">0</div>
+<div id="gold">0</div>
 <div id="health">0</div>
+<div id="inventory">inventory:</div>
 <div id="output">MESSAGES:</div>
 <div id="map">
     <div id="hero"></div>
-    <div id="monster"></div>
 </div>
 
 <div id="actions">
-    <button onclick="moveRight()"> MOVE ==></button>
-    <button onclick="doit()">DO IT!</button>
+<!--    <button onclick="moveRight()"> MOVE ==></button>-->
+<!--    <button onclick="doit()">DO IT!</button>-->
     <table style="float:right">
         <tr>
             <td>
                 &nbsp;
             </td>
             <td>
-                <button onclick="command('up')">&uarr;</button>
+                <button class="arrow" onclick="command('up')">&uarr;</button>
             </td>
             <td>
                 &nbsp;
@@ -33,13 +33,13 @@
         </tr>
         <tr>
             <td>
-                <button onclick="command('left')">&larr;</button>
+                <button class="arrow" onclick="command('left')">&larr;</button>
             </td>
             <td>
                 &nbsp;
             </td>
             <td>
-                <button onclick="command('right')">&rarr;</button>
+                <button class="arrow" onclick="command('right')">&rarr;</button>
             </td>
         </tr>
         <tr>
@@ -47,7 +47,7 @@
                 &nbsp;
             </td>
             <td>
-                <button onclick="command('down')">&darr;</button>
+                <button class="arrow" onclick="command('down')">&darr;</button>
             </td>
             <td>
                 &nbsp;
