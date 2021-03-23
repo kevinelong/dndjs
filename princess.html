@@ -3,20 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-  <style>
-      #princess {
-          background: url(./web/sprites/princessDana.png) -16px -64px;
-          width: 16px;
-          height: 32px;
+    <style>
+        #princess {
+            background: url(./web/sprites/princessDana.png) -16px -64px;
+            width: 16px;
+            height: 32px;
+            margin-top: -6px;
+            z-index: 200;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
 
-      }
+    </style>
 
-  </style>
 </head>
 <body>
 <div id='princess'></div>
-</body>
-<script>
+<script language="JavaScript">
+    let princessStep = 0;
+
+    function animatePrincess() {
+        document.querySelectorAll('#princess').forEach(e => e.style.backgroundPositionX = (((princessStep % 3) + 1) * -16).toString() + "px");
+        princessStep++;
+        setTimeout(animatePrincess, 450);
+    }
+    animatePrincess();
 
 </script>
+</body>
 </html>

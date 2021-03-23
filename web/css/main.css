@@ -28,7 +28,7 @@ button, a.button {
 }
 
 .tile {
-    background: url(../sprites/tileset2.png) 0 0;
+    background: url(../sprites/rock_tile.png) 0 0;
     box-sizing: border-box;
     width: 24px;
     height: 24px;
@@ -100,8 +100,20 @@ button, a.button {
     position: absolute;
     left: 0;
     top: 0;
+}
+
+#princess {
+    background: url(./web/sprites/princessDana.png) -16px -64px;
+    width: 16px;
+    height: 32px;
+    margin-top: -6px;
+    z-index: 200;
+    position: absolute;
+    left: 0;
+    top: 0;
 
 }
+
 
 .monster {
     background: url(../sprites/troll.png) 0 0;
