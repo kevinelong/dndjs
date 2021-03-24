@@ -1,5 +1,8 @@
 const prompt = require('prompt-sync')({sigint: true});
+const mapParser = require("./mapParser");
+let mp = new mapParser.MapParser();
 
+//console.log(mp.mapData); That's a thing and its working! (we can reference later in the constructor of game)
 class Dice {
 
     static rollOne(sides = 6) {
@@ -108,7 +111,7 @@ class Mover {
                 inventory = undefined,
                 gold = 0,
                 location = new Location()) {
-
+        this.status = 'idle';
         this.name = name;
         this.location = location;
         this.kind = kind;
@@ -163,20 +166,48 @@ class Game {
         this.messages = [];
         this.updates = [];
         this.messages.push("WELCOME");
+        mp.mapData.map(o => this.applyMapItem(o));
 
-        this.hero = new Mover('Conan');
-        this.hero.setValue('health', 100);
-        this.addMover(this.hero);
-        this.map.moveCenter(this.hero);
-        this.hero.inventory.push(new Weapon('Rusty Short Sword', 5));
-        this.hero.inventory.push(new Armor('Leather Carapace', 5));
-        const MONSTER_COUNT = 3;
-        for (let i = 0; i < MONSTER_COUNT; i++) {
-            this.monster = new Mover('Troll', 'monster');
-            this.addMover(this.monster);
-            this.map.moveRandom(this.monster);
-            this.monster.gold = 500;
-            this.monster.inventory.push(new Weapon('Rusty Cleaver', 15));
+    }
+
+    applyMapItem(o) {
+        switch (o.value) {
+            case 'X':
+                let m = new Mover("w", "wall");
+                m.location = new Location(o.x, o.y)
+                this.addMover(m);
+                break;
+
+            case '$':
+                let c = new Mover("$", "coin");
+                c.gold = 100;
+                c.location = new Location(o.x, o.y);
+                this.addMover(c);
+                break;
+
+            case "M":
+                this.monster = new Mover('Troll', 'monster');
+                this.monster.location = new Location(o.x, o.y);
+                this.addMover(this.monster);
+                this.monster.gold = 500;
+                this.monster.inventory.push(new Weapon('Rusty Cleaver', 15));
+                break;
+
+            case "H":
+                this.hero = new Mover('Conan');
+                this.hero.location = new Location(o.x, o.y);
+                this.hero.setValue('health', 100);
+                this.addMover(this.hero);
+                this.hero.inventory.push(new Weapon('Rusty Short Sword', 5));
+                this.hero.inventory.push(new Armor('Leather Carapace', 5));
+                break;
+
+            case "P":
+                this.princess = new Mover('Dana', 'princess');
+                this.princess.location = new Location(o.x, o.y);
+                this.addMover(this.princess);
+                break;
+
         }
     }
 
@@ -254,17 +285,35 @@ class Game {
     }
 
     detectCollisions() {
+        let blocked = false;
+        let removed = [];
         for (let m of this.movers) {
             for (let m2 of this.movers) {
                 if (m2.location.equals(m.location)) {
-                    if (m.kind == 'hero' && m2.kind == 'monster') {
-                        if (m2.getValue('health') > 0) {
-                            this.fight(m, m2);
+                    if (m.kind == 'hero') {
+                        if (m2.kind == 'monster') {
+                            if (m2.getValue('health') > 0) {
+                                this.fight(m, m2);
+                            }
+                        } else if (m2.kind == 'wall') {
+                            blocked = true;
+                        } else if (m2.kind == 'princess') {
+                            this.addMessage('GOOD JOB! LETS GET OUT OF HERE!');
+                            blocked = true;
+                            m2.status = 'rescued';
+                        } else if (m2.kind == 'coin') {
+                            m.gold += m2.gold;
+                            this.addMessage('collected' + m2.gold.toString());
+                            m2.gold = 0;
+                            removed.push(m2);
                         }
                     }
                 }
             }
         }
+
+        removed.map(o => this.movers = this.movers.filter(item => item !== o));
+        return blocked;
     }
 
     getUpdates() {
@@ -283,6 +332,7 @@ class Game {
                     name: m.name,
                     kind: m.kind,
                     gold: m.gold,
+                    status: m.status,
                     inventory: m.inventory.map(i => {
                         return i.name;
                     }),
@@ -300,8 +350,12 @@ class Game {
     play(command) {
         this.messages = [];
         if (command != "status") {
+            let oldLocation = new Location(this.hero.location.x, this.hero.location.y);
             this.move(this.hero, command);
-            this.detectCollisions(); //Apply rules. ++
+            let blocked = this.detectCollisions(); //Apply rules. ++
+            if (blocked) {
+                this.hero.location = oldLocation;
+            }
             //console.log(this.getStatus()); //displays state ++
             //let direction = prompt('WHICH WAY?'); //whole words all caps. ++
             //this.play(); //RECURSION. ++
