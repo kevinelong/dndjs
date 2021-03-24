@@ -17,8 +17,9 @@ class MapParser {
 
     letterToObject(l) {
         if (l == '\r') {
-            this.x = 0;
+            //do nothing
         } else if (l == '\n') {
+            this.x = 0;
             this.y++;
         } else if (l == " ") {
             //do nothing
