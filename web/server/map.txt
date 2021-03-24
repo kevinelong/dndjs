@@ -1,0 +1,14 @@
+X X X X X X X X
+X P . . . M . X
+X . . . . M . X X X
+X . X . X . . . . X
+X . X $ X . . . . X
+X M X X X . . X X X
+X . . . . . . X
+X . . . . M . X
+X . . . . M . X X X
+X . X . X . . . . X
+X . X $ X . . . . X
+X M X X X . . . X X
+X . . . . . H X X
+X X X X X X X X

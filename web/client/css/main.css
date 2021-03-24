@@ -24,11 +24,12 @@ button, a.button {
     position: absolute;
     left: 50%;
     top: 24px;
-
+    background: url(../sprites/rock.png) 0 0 repeat;
+    image-rendering: pixelated;
 }
 
 .tile {
-    background: url(../sprites/rock_tile.png) 0 0;
+    background: url(../sprites/rock_tile.png) -11px -26px;
     box-sizing: border-box;
     width: 24px;
     height: 24px;
@@ -37,6 +38,23 @@ button, a.button {
     top: 0;
     left: 0;
     z-index: 100;
+
+}
+
+.wall {
+    /* background: url(../sprites/rock_tile.png) -0px -0px;*/
+    background-color: rgba(0, 0, 0, 0.60);
+    box-sizing: border-box;
+    width: 24px;
+    height: 24px;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    border: 1px outset rgba(255, 255, 255, 0.4);
+    image-rendering: pixelated;
+
 }
 
 #output, #gold, #inventory {
@@ -76,6 +94,7 @@ button, a.button {
 }
 
 #actions {
+    display: none;
     text-align: center;
     padding: 12px;
     position: absolute;
@@ -95,25 +114,33 @@ button, a.button {
     background: url(../sprites/knight.png) 0 0;
     width: 32px;
     height: 32px;
-    margin-top: -6px;
+    margin-top: -4px;
+    margin-left: -6px;
     z-index: 200;
     position: absolute;
     left: 0;
     top: 0;
+    image-rendering: pixelated;
 }
 
 #princess {
-    background: url(./web/sprites/princessDana.png) -16px -64px;
+
+    background: url(../sprites/princessDana.png) -16px -64px;
     width: 16px;
     height: 32px;
-    margin-top: -6px;
+    margin-top: -8px;
+    margin-left: 3px;
     z-index: 200;
     position: absolute;
     left: 0;
     top: 0;
-
+    image-rendering: pixelated;
 }
 
+/*#princess.rescued {*/
+/*    background: url(../sprites/princessDana.png) -px -64px;*/
+
+/*}*/
 
 .monster {
     background: url(../sprites/troll.png) 0 0;
@@ -121,10 +148,26 @@ button, a.button {
     background-position-y: 90px;
     width: 30px;
     height: 30px;
-    margin-top: 0px;
-    margin-left: 0px;
+    margin-top: -4px;
+    margin-left: -7px;
     z-index: 150;
     position: absolute;
     left: 48px;
     top: 0;
+    image-rendering: pixelated;
+}
+
+.coin {
+    background: url(../sprites/coin.png) 0 0;
+    background-position-x: 0px;
+    background-position-y: -16px;
+    width: 16px;
+    height: 16px;
+    margin-top: 8px;
+    margin-left: 4px;
+    z-index: 150;
+    position: absolute;
+    left: 48px;
+    top: 0;
+    image-rendering: pixelated;
 }
