@@ -146,7 +146,8 @@ function updateMap(status) {
 }
 
 function command(message) {
-    fetch('http://localhost:8080/?command=' + message.toUpperCase())
+    //fetch('http://localhost:8080/?command=' + message.toUpperCase())
+    fetch('http://www.sgtskrbl.com:8080/?command=' + message.toUpperCase())
         .then(response => response.json())
         .then(updateMap);
 }
