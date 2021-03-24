@@ -5,17 +5,28 @@ const HEIGHT = 21;
 document.addEventListener("DOMContentLoaded", () => {
     let map = document.getElementById("map");
     console.log(map);
-    for (let x = 0; x < WIDTH; x++) {
-        for (let y = 0; y < HEIGHT; y++) {
-            let tile = document.createElement("div");
-            tile.classList.add("tile");
-            tile.style.left = TILE_SIZE * x + "px";
-            tile.style.top = TILE_SIZE * y + "px";
-            map.appendChild(tile);
-        }
-    }
 
     command("status");
+    let princessStep = 0;
+
+    function animatePrincess() {
+        let offset = window.princess.status == 'rescued' ? -16 : 0;
+        document.querySelectorAll('#princess').forEach(e => e.style.backgroundPositionX = (((princessStep % 3) + 1) * -(16 - offset)).toString() + "px");
+        princessStep++;
+        setTimeout(animatePrincess, 450);
+    }
+
+    animatePrincess();
+    let coinStep = 0;
+
+    function animateCoin() {
+        document.querySelectorAll('.coin').forEach(e => e.style.backgroundPositionX = (((coinStep % 4)) * -16).toString() + "px");
+        coinStep++;
+        setTimeout(animateCoin, 300); //coin bounce *_*_
+    }
+
+    animateCoin();
+
     let monsterStep = 0;
 
     function animateMonster() {
@@ -63,20 +74,34 @@ document.addEventListener("DOMContentLoaded", () => {
         // document.body.innerHTML = str;
     }
 });
+let max_x = 0;
+let max_y = 0;
 
 function updateMover(m) {
     let e = undefined;
-    if (m.kind == "hero") {
+    if (m.kind == "hero" || m.kind == 'princess') {
         e = document.getElementById(m.kind);
+        if (m.kind == "princess" && m.status == 'rescued') {
+            e.classList.add('rescued');
+        }
+
+    } else if (m.kind == "coin") {
+        e = document.createElement("div");
+        e.classList.add("coin");
+        document.getElementById("map").appendChild(e);
+    } else if (m.kind == "wall") {
+        e = document.createElement("div");
+        e.classList.add("wall");
+        document.getElementById("map").appendChild(e);
     } else if (m.kind == "monster") {
         e = document.createElement("div");
         e.classList.add("monster");
         document.getElementById("map").appendChild(e);
-
     }
+
     if (e != undefined) {
-
-
+        max_x = m.x > max_x ? m.x : max_x;
+        max_y = m.y > max_y ? m.y : max_y;
         e.style.left = m.x * TILE_SIZE + 'px';
         e.style.top = m.y * TILE_SIZE + 'px';
         if (m.health <= 0) {
@@ -104,12 +129,19 @@ let frame = 0;
 
 function updateMap(status) {
     frame++;
+    let hero = status.movers.filter(o => o.kind == "hero")[0];
+    window.princess = status.movers.filter(o => o.kind == "princess")[0];
     document.getElementById("hero").style.backgroundPositionX = ((frame % 5) * 32).toString() + 'px';
-    updateInventory(status.movers[0].inventory);
-    updateGold(status.movers[0].gold);
+    updateInventory(hero.inventory);
+    updateGold(hero.gold);
     console.log(status);
     document.querySelectorAll('.monster').forEach(e => e.remove());
+    document.querySelectorAll('.coin').forEach(e => e.remove());
+    document.querySelectorAll('.wall').forEach(e => e.remove());
     status.movers.map(updateMover);
+    let map = document.getElementById("map")
+    map.style.width = ((max_x + 1) * TILE_SIZE).toString() + "px";
+    map.style.height = ((max_y + 1) * TILE_SIZE).toString() + "px";
     updateMessages(status.messages);
 }
 
