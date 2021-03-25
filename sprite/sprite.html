@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        :root {
+            --pixel-size: 6;
+        }
+
+        body {
+            background: #96ffc1;
+        }
+
+        .Character {
+            width: calc(32px * var(--pixel-size));
+            height: calc(32px * var(--pixel-size));
+            overflow: hidden;
+            position: relative;
+            margin: 4em auto;
+        }
+
+        .Character_spritesheet {
+            animation: moveSpritesheet 1s steps(4) infinite;
+            width: calc(128px * var(--pixel-size));
+            position: absolute;
+        }
+
+        .Character_shadow {
+            position: absolute;
+            width: calc(32px * var(--pixel-size));
+            height: calc(32px * var(--pixel-size));
+        }
+
+        .pixelart {
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+        }
+
+        .face-right {
+            top: calc(-32px * var(--pixel-size));
+        }
+        .face-up {
+            top: calc(-64px * var(--pixel-size));
+        }
+        .face-left {
+            top: calc(-96px * var(--pixel-size));
+        }
+
+
+        @keyframes moveSpritesheet {
+            from {
+                transform: translate3d(0px,0,0)
+            }
+            to {
+                transform: translate3d(-100%,0,0)
+            }
+        }
+
+    </style>
+</head>
+<body>
+<!-- This is the code from a tutorial on my tiny YouTube channel: https://www.youtube.com/watch?v=ekI7vjkFrGA -->
+<div class="Character">
+    <img class="Character_shadow pixelart" src="DemoRpgCharacterShadow.png" alt="Shadow" />
+    <img class="Character_spritesheet pixelart face-down" src="DemoRpgCharacter.png" alt="Character" />
+</div>
+
+</body>
+<script>
+    let kf_index = 0;
+    function createSprite(src, width, height, steps, period, scale){
+        let keyframes = "kf_" +  kf_index;
+        let wrapper = document.createElement("div");
+        wrapper.style = "image-rendering: pixelated; image-rendering: crisp-edges;";
+        wrapper.style.position = "absolute";
+        wrapper.style.left = 0;
+        wrapper.style.top = 0;
+        wrapper.style.overflow = "hidden";
+        wrapper.style.width = (width * scale).toString() + "px";
+        wrapper.style.height = (height * scale).toString() + "px";
+
+        let inner = document.createElement("img");
+        inner.setAttribute("src", src);
+        inner.style = "image-rendering: pixelated; image-rendering: crisp-edges;animation:" +
+        keyframes + " " + period + "s steps("+steps+") infinite;"
+        inner.style.overflow = "hidden";
+        inner.style.width = (steps * width * scale).toString() + "px";
+        inner.style.height = (steps * height * scale).toString() + "px";
+
+        const css = window.document.styleSheets[0];
+        css.insertRule(
+            `@keyframes ${keyframes} ` +
+            "{from{transform:translate3d(0px,0,0)} to{transform:translate3d(-100%,0,0)}}",
+            css.cssRules.length
+        );
+
+        wrapper.appendChild(inner);
+        return wrapper;
+    }
+    let s = createSprite("DemoRpgCharacter.png", 32, 32, 4, 0.5, 6);
+    document.body.append(s);
+</script>
+</html>

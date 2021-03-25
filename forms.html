@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<form method="post">
+    <label>
+        Player Name: <input id="player_name" name="player_name">
+    </label>
+    <label>
+        Gender:
+        <input type="radio" value="M" name="gender" id="g1">
+        <input type="radio" value="F" name="gender" id="g2">
+        <input type="radio" value="O" name="gender" id="g3">
+        <input name="other" style="display: none" id="g_other">
+    </label>
+    <input type="submit" value="Rock On!">
+</form>
+
+</body>
+<script>
+    document.getElementsByName("gender").map(e => e.addEventListener("change", c => console.log(c) ));
+
+</script>
+</html>

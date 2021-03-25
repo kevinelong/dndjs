@@ -1,0 +1,23 @@
+<head>
+    <script src="dom_sprite.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", e=>{
+            document.head.appendChild(document.createElement("style"));
+            // window.s = new DOMSprite("DemoRpgCharacter.png", 32, 32, 4, 0.5, 6, {down:0,right:32,up:64,left:96}, "right");
+            window.s = new DOMSprite("ball.png", 32, 32, 4, 0.5, 6, {down:0,right:32,up:64,left:96}, "down");
+            document.body.append(s.wrapper);
+            window.s.setMode("left")
+        });
+
+    </script>
+</head>
+<body bgcolor="#ff1493">
+<div style="z-index: 2000; background-color: #96ffc1">
+    <button onclick="((e) => window.s.setMode('left'))()"> &leftarrow; </button>
+    <button onclick="window.s.setMode('down')"> &downarrow; </button>
+    <button onclick="((e) => window.s.setMode('up'))()"> &uparrow; </button>
+    <button onclick="((e) => window.s.setMode('right'))()"> &rightarrow; </button>
+</div>
+</body>
+
+</html>
