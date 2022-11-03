@@ -1,4 +1,4 @@
-const Game = require("./game");
+const Game = require("./Game/Game");
 let game = new Game.Game();
 
 let http = require('http');
